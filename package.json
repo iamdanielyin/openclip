@@ -1,0 +1,19 @@
+{
+  "name": "openclip",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "yinfxs <yinfxs@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "ibird": "^1.0.0-alpha.20",
+    "socket.io": "^2.0.4"
+  },
+  "devDependencies": {
+    "material-components-web": "^0.28.0"
+  }
+}
