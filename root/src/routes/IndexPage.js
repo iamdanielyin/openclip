@@ -28,6 +28,7 @@ class IndexPage extends Component {
 
   state = {
     uid: null,
+    textAreaContent: null,
     clipboardData: null,
     clipboardText: null,
     clipboardHtml: null,
@@ -131,8 +132,8 @@ class IndexPage extends Component {
     e.preventDefault();
   }
 
-  handleContentChange = (e) => {
-    const data = e.target.value;
+  handleSendTextAreaContent = (e) => {
+    const data = this.state.textAreaContent;
     if (data) {
       this.sendData({ type: 'text/plain', data });
     }
@@ -140,7 +141,7 @@ class IndexPage extends Component {
 
   render() {
     const self = this;
-    const { uid, clipboardData, onlineMembers, refreshTime } = this.state;
+    const { uid, clipboardData, onlineMembers, refreshTime, textAreaContent } = this.state;
     const { index } = this.props;
 
     let content = <div className={styles.emptyContent}>暂无记录~</div>;
@@ -231,8 +232,19 @@ class IndexPage extends Component {
                   <TextArea
                     placeholder={'请粘贴你的内容~'}
                     rows={5}
-                    onChange={this.handleContentChange}
+                    value={textAreaContent}
+                    onChange={e => {
+                      this.setState({ textAreaContent: e.target.value });
+                    }}
                   />
+                  <Button
+                    style={{ width: '100%' }}
+                    type="primary"
+                    icon="rocket"
+                    onClick={this.handleSendTextAreaContent}
+                  >
+                    开始发送
+                   </Button>
                 </div>
               );
             }
