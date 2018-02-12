@@ -205,7 +205,7 @@ class IndexPage extends Component {
 
     return (
       <div className={styles.content}>
-        <Alert message="登录相同账号，实现信息实时互通。" type="info" showIcon />
+        <Alert message="任意设备间，凡相同账号，信息皆共享。" type="info" showIcon />
         <div className={styles.authInfo}>
           <Input
             value={uid}
