@@ -4,17 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_ENV=production node index.js",
+    "build": "gulp"
   },
   "keywords": [],
   "author": "yinfxs <yinfxs@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "babel-runtime": "6.26.0",
     "ibird": "^1.0.0-alpha.20",
     "ibird-task": "^1.0.0-alpha.6",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
-    "material-components-web": "^0.28.0"
+    "babel-core": "6.26.0",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-env": "1.6.1",
+    "gulp": "3.9.1",
+    "gulp-babel": "7.0.0",
+    "gulp-sequence": "0.4.6",
+    "gulp-uglify": "3.0.0"
   }
 }
