@@ -131,6 +131,13 @@ class IndexPage extends Component {
     e.preventDefault();
   }
 
+  handleContentChange = (e) => {
+    const data = e.target.value;
+    if (data) {
+      this.sendData({ type: 'text/plain', data });
+    }
+  }
+
   render() {
     const self = this;
     const { uid, clipboardData, onlineMembers, refreshTime } = this.state;
@@ -220,11 +227,13 @@ class IndexPage extends Component {
             matches => {
               if (!matches) return null;
               return (
-                <TextArea
-                  placeholder={'请粘贴你的内容~'}
-                  rows={5}
-                  onPaste={this.handlePaste}
-                />
+                <div>
+                  <TextArea
+                    placeholder={'请粘贴你的内容~'}
+                    rows={5}
+                    onChange={this.handleContentChange}
+                  />
+                </div>
               );
             }
           }</Media>
