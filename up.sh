@@ -11,8 +11,8 @@ docker rmi -f $name
 
 docker build -t $name .
 docker run --restart=always -d \
-    -e "VIRTUAL_HOST=$name.dexdev.me" \
-    -e "LETSENCRYPT_HOST=$name.dexdev.me" \
+    -e "VIRTUAL_HOST=$name.wosoft.me" \
+    -e "LETSENCRYPT_HOST=$name.wosoft.me" \
     --name $name \
     --expose 3000 \
     $name
