@@ -138,7 +138,7 @@ class IndexPage extends Component {
 
     let content = <div className={styles.emptyContent}>暂无记录~</div>;
     if (clipboardData && clipboardData.type && clipboardData.data) {
-      if (/html\//.test(clipboardData.type)) {
+      if (/\/html/.test(clipboardData.type)) {
         //HTML
         content = <div dangerouslySetInnerHTML={{ __html: clipboardData.data }} />;
       } else if (/text\//.test(clipboardData.type)) {
