@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "dependencies": {
+    "antd": "^3.2.0",
+    "copy-to-clipboard": "^3.0.8",
+    "dva": "^2.1.0",
+    "dva-loading": "^1.0.4",
+    "moment": "^2.20.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-media": "^1.8.0",
+    "socket.io-client": "^2.0.4"
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.6.3",
+    "roadhog": "^2.2.0"
+  },
+  "scripts": {
+    "start": "roadhog server",
+    "build": "roadhog build"
+  }
+}

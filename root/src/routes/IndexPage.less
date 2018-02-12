@@ -1,0 +1,78 @@
+.content {
+    padding: 20px;
+    border: 1px solid #f7f4f4;
+    width: 500px;
+    background: #5976cc;
+    .authInfo {
+        margin-bottom: 10px;
+    }
+    .clipboardArea {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    .uploadArea {
+        width: 100%;
+        .uploadButton {
+            width: 100%;
+        }
+    }
+    .footer {
+        padding: 10px 5px 0 5px;
+        text-align: center;
+        color: #fff;
+    }
+    .emptyContent {
+        margin-top: 10%;
+    }
+}
+
+:global {
+    .ant-input-group-addon {
+        color: #fff;
+        background-color: #1890ff;
+        border-color: #1890ff;
+        cursor: pointer;
+        user-select: none;
+    }
+    .ant-card-body {
+        text-align: center;
+        min-height: 200px;
+    }
+    .ant-upload {
+        width: 100%;
+    }
+    .ant-upload-list-item-info .anticon-loading,
+    .ant-upload-list-item-info .anticon-paper-clip,
+    .ant-upload-list-item-name {
+        color: #fff;
+    }
+    .ant-card-extra {
+        font-size: 12px;
+        color: #ccc;
+    }
+    .ant-alert-info {
+        margin-bottom: 10px;
+        color: #fff;
+        background: transparent;
+        user-select: none;
+    }
+    .ant-alert-icon {
+        color: #fff !important;
+    }
+}
+
+// 移动端适配适配
+@media (max-width: 768px) {
+    .content {
+        padding: 10px;
+        width: 100%;
+        .emptyContent {
+            margin-top: 10px;
+        }
+    }
+     :global {
+        .ant-card-body {
+            min-height: 0;
+        }
+    }
+}
