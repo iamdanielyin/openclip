@@ -11,8 +11,7 @@ module.exports = {
   "hash": true,
   "define": {
     "process.env": {},
-    "process.env.__ORIGIN__": process.env.__ORIGIN__,
-    "process.env.__SOCKET__": process.env.__SOCKET__,
+    "process.env.__ORIGIN__": process.env.__ORIGIN__
   },
   "proxy": {
     "/api": {

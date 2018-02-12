@@ -11,10 +11,8 @@ docker rmi -f $name
 
 docker build -t $name .
 docker run --restart=always -d \
-	-e "VIRTUAL_PORT=3000" \
 	-e "VIRTUAL_HOST=$name.wosoft.me" \
 	-e "LETSENCRYPT_HOST=$name.wosoft.me" \
 	--name $name \
 	--expose 3000 \
-	-p 4000:4000 \
 	$name
