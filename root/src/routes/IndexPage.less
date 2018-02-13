@@ -2,6 +2,7 @@
     padding: 20px;
     border: 1px solid #f7f4f4;
     width: 500px;
+    border-radius: 4px;
     background: #5976cc;
     .authInfo {
         margin-bottom: 10px;
@@ -13,16 +14,26 @@
     .uploadArea {
         width: 100%;
         .uploadButton {
-            width: 100%;
+            cursor: pointer;
+            font-size: 45px;
+            color: #40a9ff;
         }
     }
     .footer {
         padding: 10px 5px 0 5px;
         text-align: center;
-        color: #fff;
+        color: #9aade8;
+        user-select: none;
     }
     .emptyContent {
         margin-top: 10%;
+        user-select: none;
+    }
+    .divider {
+        height: 1px;
+        background: #ccc;
+        width: 100%;
+        margin: 20px 0px;
     }
 }
 
@@ -41,13 +52,10 @@
     .ant-upload {
         width: 100%;
     }
-    .ant-upload-list-item-info .anticon-loading,
-    .ant-upload-list-item-info .anticon-paper-clip,
     .ant-upload-list-item-name {
-        color: #fff;
+        text-align: left;
     }
     .ant-card-extra {
-        font-size: 12px;
         color: #ccc;
     }
     .ant-alert-info {
@@ -64,10 +72,21 @@
 // 移动端适配适配
 @media (max-width: 768px) {
     .content {
+        height: 100%;
+        border: 0;
         padding: 10px;
         width: 100%;
         .emptyContent {
-            margin-top: 10px;
+            margin-top: 0;
+        }
+        .uploadArea {
+            margin-bottom: 25px;
+        }
+        .divider {
+            margin: 15px 0px 20px 0px;
+        }
+        .footer {
+            margin: 30px 0;
         }
     }
      :global {

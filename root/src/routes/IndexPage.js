@@ -70,6 +70,8 @@ class IndexPage extends Component {
     this.setState({ clipboardData: obj, refreshTime: moment().format('YYYY-MM-DD HH:mm:ss') });
     if (typeof obj.data === 'string') {
       copy(obj.data);
+    } else if (obj.data.url) {
+      copy(obj.data.url);
     }
   }
   sendData = (obj) => {
@@ -82,6 +84,7 @@ class IndexPage extends Component {
       return console.warn('粘贴数据格式不正确');
     }
     client.emit(`${uid}:copy_or_cut`, obj);
+    this.setState({ refreshTime: moment().format('YYYY-MM-DD HH:mm:ss') });
   }
 
   handleChange = (e) => {
@@ -108,6 +111,7 @@ class IndexPage extends Component {
     const client = index.client;
     if (!uid || !client) return message.error('未登录');
 
+    let pushed = true;
     for (const item of e.clipboardData.items) {
       if (/image\//.test(item.type)) {
         // 图片
@@ -115,13 +119,20 @@ class IndexPage extends Component {
         if (blob) {
           const form = new FormData();
           form.append('file', blob, blob.name);
-          this.uploadFile(form, { kind: item.kind, type: item.type }, (obj, data) => {
-            if (data) {
-              this.sendData({ type: obj.type, data });
+          this.uploadFile(form, { kind: item.kind, type: item.type }, (obj, url) => {
+            if (url) {
+              this.sendData({
+                type: obj.type,
+                data: {
+                  name: blob.name,
+                  url
+                }
+              });
             }
           });
         } else {
           message.warn('非图片文件，请使用上传功能');
+          pushed = false;
         }
       } else if (/text\//.test(item.type)) {
         // 文本
@@ -130,12 +141,19 @@ class IndexPage extends Component {
       }
     }
     e.preventDefault();
+    if (pushed) {
+      message.success('数据已推送', 1);
+    }
   }
 
   handleSendTextAreaContent = (e) => {
     const data = this.state.textAreaContent;
     if (data) {
       this.sendData({ type: 'text/plain', data });
+      message.success('数据已推送', 1);
+      this.setState({ textAreaContent: null });
+    } else {
+      message.warn('请先粘贴你的内容');
     }
   }
 
@@ -144,19 +162,27 @@ class IndexPage extends Component {
     const { uid, clipboardData, onlineMembers, refreshTime, textAreaContent } = this.state;
     const { index } = this.props;
 
-    let content = <div className={styles.emptyContent}>暂无记录~</div>;
+    let content = <Media query={{ maxWidth: 768 }}>{
+      (matches) => {
+        if (matches) {
+          return <div className={styles.emptyContent}>暂无数据</div>;
+        } else {
+          return <div className={styles.emptyContent}>在此 粘贴 或 Ctrl+V~</div>;
+        }
+      }
+    }</Media>;
     if (clipboardData && clipboardData.type && clipboardData.data) {
-      if (/\/html/.test(clipboardData.type)) {
+      if (/\/html/.test(clipboardData.type) && !clipboardData.data.url) {
         //HTML
         content = <div dangerouslySetInnerHTML={{ __html: clipboardData.data }} />;
-      } else if (/text\//.test(clipboardData.type)) {
+      } else if (/text\//.test(clipboardData.type) && !clipboardData.data.url) {
         //普通文本
         content = clipboardData.data;
       } else if (/image\//.test(clipboardData.type)) {
         //图片
         content = (
           <a href={clipboardData.data} target="__blank">
-            <img width="100%" alt={clipboardData.data} src={clipboardData.data} />
+            <img width="100%" alt={clipboardData.data.name} src={clipboardData.data.url} />
           </a>
         );
       } else {
@@ -180,7 +206,7 @@ class IndexPage extends Component {
         } else {
           fileIcon = <Icon type="file-unknown" />;
         }
-        content = <a href={clipboardData.data} target="__blank">{fileIcon} 点我下载</a>;
+        content = <a href={clipboardData.data.url} target="__blank">{fileIcon} {clipboardData.data.name}</a>;
       }
     }
 
@@ -195,7 +221,10 @@ class IndexPage extends Component {
           message.success(`${info.file.name} 文件上传成功`);
           self.sendData({
             type: info.file.type,
-            data: info.file.response.data
+            data: {
+              name: info.file.name,
+              url: info.file.response.data
+            }
           });
         } else if (info.file.status === 'error') {
           message.error(`${info.file.name} 文件上传失败`);
@@ -205,7 +234,7 @@ class IndexPage extends Component {
 
     return (
       <div className={styles.content}>
-        <Alert message="任意设备间，凡相同账号，信息皆共享。" type="info" showIcon />
+        <Alert message="任意设备间，凡相同账号，信息共享。" type="info" showIcon />
         <div className={styles.authInfo}>
           <Input
             value={uid}
@@ -219,26 +248,34 @@ class IndexPage extends Component {
           className={styles.clipboardArea}
           extra={
             <div>
-              <div>{`在线人数：${onlineMembers || '-'}`}</div>
+              <div>{`在线人数 ${onlineMembers || '-'}`}</div>
             </div>
           }
           onPaste={this.handlePaste}
         >
+          <div className={styles.uploadArea}>
+            <Upload {...uploadProps}>
+              <Icon className={styles.uploadButton} type="inbox" />
+            </Upload>
+          </div>
           <Media query={{ maxWidth: 768 }}>{
             matches => {
-              if (!matches) return null;
+              if (!matches) {
+                return null;
+              }
               return (
                 <div>
                   <TextArea
                     placeholder={'请粘贴你的内容~'}
                     rows={5}
                     value={textAreaContent}
+                    style={{ borderRadius: '4px 4px 0 0' }}
                     onChange={e => {
                       this.setState({ textAreaContent: e.target.value });
                     }}
                   />
                   <Button
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', borderRadius: '0 0 4px 4px' }}
                     type="primary"
                     icon="rocket"
                     onClick={this.handleSendTextAreaContent}
@@ -249,15 +286,9 @@ class IndexPage extends Component {
               );
             }
           }</Media>
+          <div className={styles.divider}></div>
           {content}
         </Card>
-        <div className={styles.uploadArea}>
-          <Upload {...uploadProps}>
-            <Button className={styles.uploadButton}>
-              <Icon type="upload" /> Click to Upload
-            </Button>
-          </Upload>
-        </div>
         <div className={styles.footer}>{`刷新时间：${refreshTime || '-'}`}</div>
       </div>
     )
