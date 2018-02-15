@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import Media from "react-media";
 import copy from 'copy-to-clipboard';
-import { message, Input, Card, Icon, Upload, Button, Alert } from 'antd';
+import { message, Input, Card, Icon, Upload, Button, Alert, Switch } from 'antd';
 import moment from 'moment';
 import styles from './IndexPage.less';
 
@@ -35,7 +35,8 @@ class IndexPage extends Component {
     clipboardImage: null,
     clipboardFile: null,
     onlineMembers: null,
-    refreshTime: moment().format('YYYY-MM-DD HH:mm:ss')
+    refreshTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+    inputMode: false
   }
 
   handleAuth = () => {
@@ -159,7 +160,7 @@ class IndexPage extends Component {
 
   render() {
     const self = this;
-    const { uid, clipboardData, onlineMembers, refreshTime, textAreaContent } = this.state;
+    const { uid, clipboardData, onlineMembers, refreshTime, textAreaContent, inputMode } = this.state;
     const { index } = this.props;
 
     let content = <Media query={{ maxWidth: 768 }}>{
@@ -260,7 +261,7 @@ class IndexPage extends Component {
           </div>
           <Media query={{ maxWidth: 768 }}>{
             matches => {
-              if (!matches) {
+              if (!matches && inputMode !== true) {
                 return null;
               }
               return (
@@ -287,6 +288,24 @@ class IndexPage extends Component {
             }
           }</Media>
           <div className={styles.divider}></div>
+          <Media query={{ maxWidth: 768 }}>{
+            matches => {
+              if (matches) {
+                return null;
+              }
+              return (
+                <Switch
+                  className={styles.inputMode}
+                  checked={inputMode}
+                  unCheckedChildren={<Icon type="form" style={{ fontSize: 16 }} />}
+                  checkedChildren={<Icon type="form" style={{ fontSize: 16 }} />}
+                  onChange={checked => {
+                    this.setState({ inputMode: checked });
+                  }}
+                />
+              );
+            }
+          }</Media>
           {content}
         </Card>
         <div className={styles.footer}>{`刷新时间：${refreshTime || '-'}`}</div>
