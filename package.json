@@ -8,8 +8,8 @@
     "build": "gulp"
   },
   "keywords": [],
-  "author": "yinfxs <yinfxs@gmail.com>",
-  "license": "ISC",
+  "author": "Daniel Yin <yinfxs@gmail.com>",
+  "license": "Apache-2.0",
   "dependencies": {
     "babel-runtime": "6.26.0",
     "ibird": "^1.0.0-alpha.20",
