@@ -25,7 +25,7 @@ app.post('/upload', async ctx => {
 
 app.addTask({
   name: '文件清理',
-  cronTime: '0 * * * * *',
+  cronTime: '0 */5 * * * *',
   onTick: () => {
     try {
       const uploadDir = app.c()['uploadDir'];

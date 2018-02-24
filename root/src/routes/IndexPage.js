@@ -182,7 +182,7 @@ class IndexPage extends Component {
       } else if (/image\//.test(clipboardData.type)) {
         //图片
         content = (
-          <a href={clipboardData.data} target="__blank">
+          <a href={clipboardData.data.url} target="__blank">
             <img width="100%" alt={clipboardData.data.name} src={clipboardData.data.url} />
           </a>
         );
