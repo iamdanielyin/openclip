@@ -44,14 +44,13 @@ function calcUserOnline (uid, add) {
   if (!uid) {
     return
   }
-  count = userOnline[uid];
+  let count = userOnline[uid], total = Object.keys(totalOnline).length;
   count = (typeof count === 'number' && Number.isFinite(count)) ? count : 0;
   if (add) {
     count++;
   } else if (count > 0){
     count--;
   }
-  total = Object.keys(totalOnline).length
   if (count > total) {
     count = total;
   }
