@@ -34,6 +34,7 @@ class IndexPage extends Component {
     clipboardHtml: null,
     clipboardImage: null,
     clipboardFile: null,
+    onlineUsers: null,
     onlineMembers: null,
     refreshTime: moment().format('YYYY-MM-DD HH:mm:ss'),
     inputMode: false
@@ -46,14 +47,18 @@ class IndexPage extends Component {
 
     let uid = index.uid;
     if (uid) {
+      client.removeAllListeners(`${uid}:onlineUsers`);
       this.props.dispatch({
         type: 'index/logout'
       });
-      this.setState({ uid: null });
+      this.setState({ uid: null, onlineUsers: null });
       client.removeAllListeners(`${uid}:paste`);
       message.success(`账号 ${uid} 已退出登录`);
     } else {
       uid = this.state.uid;
+      client.on(`${uid}:onlineUsers`, (data) => {
+        this.setState({ onlineUsers: data });
+      });
       if (!uid) return message.warn('请先输入账号哦~');
       this.props.dispatch({
         type: 'index/login',
@@ -160,7 +165,7 @@ class IndexPage extends Component {
 
   render() {
     const self = this;
-    const { uid, clipboardData, onlineMembers, refreshTime, textAreaContent, inputMode } = this.state;
+    const { uid, clipboardData, onlineUsers, onlineMembers, refreshTime, textAreaContent, inputMode } = this.state;
     const { index } = this.props;
 
     let content = <Media query={{ maxWidth: 768 }}>{
@@ -249,7 +254,12 @@ class IndexPage extends Component {
           className={styles.clipboardArea}
           extra={
             <div>
-              <div>{`在线人数 ${onlineMembers || '-'}`}</div>
+              <div>
+                <span>{`在线人数 `}</span>
+                <span>{onlineUsers || '-'}</span>
+                <span>{` / `}</span>
+                <span>{onlineMembers || '-'}</span>
+              </div>
             </div>
           }
           onPaste={this.handlePaste}

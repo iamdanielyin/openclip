@@ -38,15 +38,37 @@ app.play(null);
 
 const server = require('http').createServer(app.callback());
 const io = require('socket.io')(server);
-const totalOnline = {};
+const totalOnline = {}, userOnline = {};
+
+function calcUserOnline (uid, add) {
+  if (!uid) {
+    return
+  }
+  count = userOnline[uid];
+  count = (typeof count === 'number' && Number.isFinite(count)) ? count : 0;
+  if (add) {
+    count++;
+  } else if (count > 0){
+    count--;
+  }
+  total = Object.keys(totalOnline).length
+  if (count > total) {
+    count = total;
+  }
+  userOnline[uid] = count;
+}
+
 io.on('connection', function (client) {
   totalOnline[client.id] = 1;
   app.info(`客户端 ${client.id} 连接成功，当前在线：${Object.keys(totalOnline).length}`);
   io.emit('onlineMembers', Object.keys(totalOnline).length);
 
   client.on('login', function (uid) {
-    app.info(`客户端 ${client.id} 登录：${uid}`);
     if (uid) {
+      app.info(`客户端 ${client.id} 登录：${uid}`);
+      client.uid = uid
+      calcUserOnline(uid, true);
+      io.emit(`${uid}:onlineUsers`, userOnline[uid]);
       client.on(`${uid}:copy_or_cut`, function (data) {
         client.broadcast.emit(`${uid}:paste`, data);
       });
@@ -54,14 +76,21 @@ io.on('connection', function (client) {
   });
 
   client.on('logout', function (uid) {
-    app.info(`客户端 ${client.id} 退出登录：${uid}`);
     if (uid) {
+      app.info(`客户端 ${client.id} 退出登录：${uid}`);
+      delete client.uid
+      calcUserOnline(uid, false);
+      io.emit(`${uid}:onlineUsers`, userOnline[uid]);
       client.removeAllListeners(`${uid}:copy_or_cut`);
     }
   });
 
   client.on('disconnect', function () {
     delete totalOnline[client.id];
+    if (client.uid) {
+      calcUserOnline(client.uid, false);
+      io.emit(`${client.uid}:onlineUsers`, userOnline[client.uid]);
+    }
     app.info(`客户端 ${client.id} 连接断开，当前在线：${Object.keys(totalOnline).length}`);
     io.emit('onlineMembers', Object.keys(totalOnline).length);
   });

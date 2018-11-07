@@ -1,7 +1,7 @@
 /*
  * 通用接口操作模块
- * @Author: yinfxs 
- * @Date: 2017-09-02 08:41:11 
+ * @Author: yinfxs
+ * @Date: 2017-09-02 08:41:11
  * @Last Modified by: yinfxs
  * @Last Modified time: 2018-02-12 10:07:16
  */
@@ -86,7 +86,5 @@ export function urlfix(url) {
   } else {
     correctUrl = `${constants.API_PREFIX}/${url}`;
   }
-
-  correctUrl = (process.env.__ORIGIN__ || '') + correctUrl;
   return correctUrl;
 }

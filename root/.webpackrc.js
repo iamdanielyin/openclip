@@ -9,10 +9,7 @@ module.exports = {
   },
   "disableDynamicImport": true,
   "hash": true,
-  "define": {
-    "process.env": {},
-    "process.env.__ORIGIN__": process.env.__ORIGIN__
-  },
+  "define": {},
   "proxy": {
     "/api": {
       "target": "http://localhost:3000",

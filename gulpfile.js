@@ -34,8 +34,6 @@ gulp.task('build:server', function () {
 gulp.task('copy:others', function () {
   return gulp.src([
     'package.json',
-    'Dockerfile',
-    'up.sh',
     'src/**/*.json',
     'src/**/*.html'
   ]).pipe(gulp.dest('dist'));
